@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     DESCRIPTION: str = 'Application for plants lovers.'
     VERSION: str = __version__
     DATABASE_URL: str
+    ALEMBIC_DATABASE_URL: str
 
     model_config = SettingsConfigDict(
         env_file='.env',
