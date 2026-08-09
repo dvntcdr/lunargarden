@@ -1,0 +1,9 @@
+[project]
+name = "lunargarden"
+version = "0.1.0"
+description = "The API for Plant Parents."
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi[standard]>=0.141.1",
+]
