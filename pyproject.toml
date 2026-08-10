@@ -5,6 +5,7 @@ description = "The API for Plant Parents."
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "alembic>=1.19.1",
     "fastapi[standard]>=0.141.1",
     "sqlalchemy>=2.0.51",
 ]
