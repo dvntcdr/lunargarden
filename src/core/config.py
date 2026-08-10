@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     DESCRIPTION: str = 'The API for Plant Parents.'
     VERSION: str = __version__
     DATABASE_URL: str
+    ALEMBIC_DATABASE_URL: str
 
     model_config = SettingsConfigDict(
         env_file='.env',
