@@ -1,8 +1,8 @@
 from src.core.exceptions import AlreadyExists
+from src.infra.security.auth import hash_password
 from src.models.user import User
 from src.repos.user import UserRepository
 from src.schemas.user import UserCreate
-from src.infra.security.auth import hash_password
 
 
 class AuthService:
