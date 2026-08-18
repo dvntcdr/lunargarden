@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     VERSION: str = __version__
     DATABASE_URL: str
     ALEMBIC_DATABASE_URL: str
+    DOCS_URL: str = '/docs'
+    REDOC_URL: str = '/redoc'
 
     model_config = SettingsConfigDict(
         env_file='.env',
@@ -26,12 +28,14 @@ class Settings(BaseSettings):
             'title': self.APP_NAME,
             'description': self.DESCRIPTION,
             'version': self.VERSION,
+            'docs_url': self.DOCS_URL,
+            'redoc_url': self.REDOC_URL,
         }
 
 
 @lru_cache
 def get_settings() -> Settings:
-    return Settings()
+    return Settings()  # type: ignore
 
 
 settings = get_settings()
