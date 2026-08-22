@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     ALEMBIC_DATABASE_URL: str
     DOCS_URL: str = '/docs'
     REDOC_URL: str = '/redoc'
+    ACCESS_TOKEN_EXPIRE_SECONDS: int = 900
+    JWT_ALGORITHM: str = 'HS256'
+    REFRESH_TOKEN_EXPIRE_SECONDS: int = 1800
+    SECRET_KEY: str
 
     model_config = SettingsConfigDict(
         env_file='.env',
