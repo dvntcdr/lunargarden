@@ -1,6 +1,7 @@
 from typing import Annotated
 
 from fastapi import Depends
+from fastapi.security import OAuth2PasswordRequestForm
 
 from src.api.deps.db.repos import UserRepoDep, TokenRepoDep
 from src.services.auth import AuthService
@@ -14,3 +15,4 @@ def get_auth_service(
 
 
 AuthServiceDep = Annotated[AuthService, Depends(get_auth_service)]
+LoginFormDep = Annotated[OAuth2PasswordRequestForm, Depends()]
