@@ -9,11 +9,16 @@ class AppException(Exception):
         self.detail = detail or self.__class__.detail
 
 
-class AlreadyExists(AppException):
+class AlreadyExistsException(AppException):
     status_code = status.HTTP_400_BAD_REQUEST
     detail = 'Already exists'
 
 
-class InvalidCredentials(AppException):
+class InvalidCredentialsException(AppException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = 'Invalid credentials'
+
+
+class TokenRevokedException(AppException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = 'Token has been revoked'

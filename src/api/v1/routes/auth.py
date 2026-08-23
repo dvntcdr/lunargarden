@@ -1,7 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 
 from src.api.deps.auth import AuthServiceDep, LoginFormDep
-from src.schemas.auth import TokenResponse
+from src.schemas.auth import TokenResponse, RefreshRequest
 from src.schemas.user import UserCreate, UserResponse
 from src.models.user import User
 
@@ -17,3 +17,8 @@ async def register(service: AuthServiceDep, data: UserCreate) -> User:
 @router.post('/token', response_model=TokenResponse)
 async def login(service: AuthServiceDep, form_data: LoginFormDep) -> TokenResponse:
     return await service.login(form_data.username, form_data.password)
+
+
+@router.post('/logout', status_code=status.HTTP_204_NO_CONTENT)
+async def logout(service: AuthServiceDep, data: RefreshRequest) -> None:  # TODO: add current user dep
+    return await service.logout(data.refresh_token)
