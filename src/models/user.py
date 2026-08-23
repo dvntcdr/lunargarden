@@ -15,4 +15,4 @@ class User(Base):
     is_active: Mapped[bool] = mc(Boolean, default=True, nullable=False)
     is_verified: Mapped[bool] = mc(Boolean, default=False, nullable=False)
 
-    refresh_tokens = relationship('RefreshToken', back_populates='owner_id')
+    refresh_tokens = relationship('RefreshToken', back_populates='owner')
