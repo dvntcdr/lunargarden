@@ -71,6 +71,9 @@ class AuthService:
 			raise TokenRevokedException()
 		
 		await self.token_repo.revoke(token)
+	
+	async def logout_all(self, user: User) -> None:
+		await self.token_repo.revoke_all(user.id)
 
 	async def _generate_tokens(self, user: User) -> TokenResponse:
 		access_token = create_access_token(payload={'sub': user.username})
