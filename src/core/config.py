@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = 'HS256'
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
     SECRET_KEY: str
+    LOGIN_URL: str = '/v1/auth/token'
 
     model_config = SettingsConfigDict(
         env_file='.env',
