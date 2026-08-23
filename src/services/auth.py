@@ -5,6 +5,7 @@ from src.core.exceptions import (
 	AlreadyExistsException,
 	InvalidCredentialsException,
 	TokenRevokedException,
+	TokenExpiredException
 )
 from src.infra.security.auth import (
 	create_access_token,
@@ -74,6 +75,23 @@ class AuthService:
 	
 	async def logout_all(self, user: User) -> None:
 		await self.token_repo.revoke_all(user.id)
+	
+	async def refresh(self, raw_refresh: str, user: User) -> TokenResponse:
+		token = await self._get_token(raw_refresh)
+
+		if token is None:
+			raise InvalidCredentialsException()
+		
+		if token.is_revoked:
+			await self.token_repo.revoke_all(user.id)
+			raise TokenRevokedException()
+		
+		if token.expires_at.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc):
+			raise TokenExpiredException()
+
+		await self.token_repo.revoke(token)
+
+		return await self._generate_tokens(user)
 
 	async def _generate_tokens(self, user: User) -> TokenResponse:
 		access_token = create_access_token(payload={'sub': user.username})

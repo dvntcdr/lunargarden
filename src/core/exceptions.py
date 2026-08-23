@@ -22,3 +22,8 @@ class InvalidCredentialsException(AppException):
 class TokenRevokedException(AppException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = 'Token has been revoked'
+
+
+class TokenExpiredException(AppException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = 'Token has expired'

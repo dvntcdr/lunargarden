@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status
 
 from src.api.deps.auth import AuthServiceDep, LoginFormDep, CurrentUserDep
-from src.schemas.auth import TokenResponse, RefreshRequest
+from src.schemas.auth import TokenResponse, RefreshRequest, LogoutRequest
 from src.schemas.user import UserCreate, UserResponse
 from src.models.user import User
 
@@ -22,7 +22,7 @@ async def login(service: AuthServiceDep, form_data: LoginFormDep) -> TokenRespon
 @router.post('/logout', status_code=status.HTTP_204_NO_CONTENT)
 async def logout(
     service: AuthServiceDep,
-    data: RefreshRequest,
+    data: LogoutRequest,
     current_user: CurrentUserDep  # noqa
 ) -> None:
     return await service.logout(data.refresh_token)
@@ -34,3 +34,12 @@ async def logout_all(
     current_user: CurrentUserDep
 ) -> None:
     return await service.logout_all(current_user)
+
+
+@router.post('/refresh', response_model=TokenResponse)
+async def refresh(
+    service: AuthServiceDep,
+    data: RefreshRequest,
+    current_user: CurrentUserDep
+) -> TokenResponse:
+    return await service.refresh(data.refresh_token, current_user)
