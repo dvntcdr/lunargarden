@@ -2,12 +2,15 @@ from typing import Annotated
 
 from fastapi import Depends
 
-from src.api.deps.db.repos import UserRepoDep
+from src.api.deps.db.repos import UserRepoDep, TokenRepoDep
 from src.services.auth import AuthService
 
 
-def get_auth_service(user_repo: UserRepoDep) -> AuthService:
-    return AuthService(user_repo)
+def get_auth_service(
+    user_repo: UserRepoDep,
+    token_repo: TokenRepoDep
+) -> AuthService:
+    return AuthService(user_repo, token_repo)
 
 
 AuthServiceDep = Annotated[AuthService, Depends(get_auth_service)]
