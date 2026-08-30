@@ -11,15 +11,28 @@ class Settings(BaseSettings):
     APP_NAME: str = 'LunarGarden'
     DESCRIPTION: str = 'The API for Plant Parents.'
     VERSION: str = __version__
-    DATABASE_URL: str
-    ALEMBIC_DATABASE_URL: str
     DOCS_URL: str = '/docs'
     REDOC_URL: str = '/redoc'
+
+    DATABASE_URL: str
+    ALEMBIC_DATABASE_URL: str
+    
     ACCESS_TOKEN_EXPIRE_SECONDS: int = 3600
     JWT_ALGORITHM: str = 'HS256'
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
     SECRET_KEY: str
+    
     LOGIN_URL: str = '/v1/auth/token'
+
+    MAIL_USERNAME: str
+    MAIL_PASSWORD: str
+    MAIL_FROM: str
+    MAIL_PORT: int
+    MAIL_SERVER: str
+    MAIL_FROM_NAME: str
+    MAIL_STARTTLS: bool = True
+    MAIL_SSL_TLS: bool = False
+    USE_CREDENTIALS: bool = True
 
     model_config = SettingsConfigDict(
         env_file='.env',
