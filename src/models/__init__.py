@@ -1,6 +1,6 @@
 from .user import User
 from .refresh_token import RefreshToken
-from .plants import Plant
+from .plant import Plant
 
 
 __all__ = [
