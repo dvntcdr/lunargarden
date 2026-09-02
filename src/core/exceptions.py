@@ -27,3 +27,13 @@ class TokenRevokedException(AppException):
 class TokenExpiredException(AppException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = 'Token has expired'
+
+
+class NotFoundException(AppException):
+    status_code = status.HTTP_404_NOT_FOUND
+    detail = 'Not found'
+
+
+class ForbiddenException(AppException):
+    status_code = status.HTTP_403_FORBIDDEN
+    detail = 'Forbidden'
