@@ -17,6 +17,8 @@ class PlantBase(BaseModel):
     health_status: HealthStatus = HealthStatus.HEALTHY
     watering_frequency: str | None = Field(None, max_length=200)
     sunlight_type: SunlightType = SunlightType.LOW
+    is_public: bool
+    is_favorite: bool
 
 
 class PlantCreate(PlantBase):
@@ -27,6 +29,8 @@ class PlantUpdate(PlantBase):
     name: str | None = Field(None, min_length=1, max_length=100)
     health_status: HealthStatus | None = None  # type: ignore
     sunlight_type: SunlightType | None = None  # type: ignore
+    is_public: bool | None = None    # type: ignore
+    is_favorite: bool | None = None  # type: ignore
 
 
 class PlantResponse(BaseModel):
@@ -43,6 +47,8 @@ class PlantResponse(BaseModel):
     health_status: HealthStatus
     watering_frequency: str | None
     sunlight_type: SunlightType
+    is_public: bool
+    is_favorite: bool
 
     created_at: datetime
     updated_at: datetime
