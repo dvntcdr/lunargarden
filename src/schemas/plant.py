@@ -24,7 +24,9 @@ class PlantCreate(PlantBase):
     
 
 class PlantUpdate(PlantBase):
-    name: str | None = Field(None, min_length=1, max_length=100)    
+    name: str | None = Field(None, min_length=1, max_length=100)
+    health_status: HealthStatus | None = None  # type: ignore
+    sunlight_type: SunlightType | None = None  # type: ignore
 
 
 class PlantResponse(BaseModel):
