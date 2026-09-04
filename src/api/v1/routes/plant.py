@@ -18,6 +18,15 @@ async def get_plants(
     return await service.get_all(current_user)
 
 
+@router.get('/{plant_id}', response_model=PlantResponse)
+async def get_plant(
+    service: PlantServiceDep,
+    plant_id: UUID,
+    current_user: CurrentUserDep
+) -> Plant:
+    return await service.get_by_id(plant_id, current_user)
+
+
 @router.post('/', response_model=PlantResponse)
 async def create_plant(
     service: PlantServiceDep,
