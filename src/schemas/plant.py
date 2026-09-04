@@ -7,7 +7,7 @@ from src.models.plant import HealthStatus, SunlightType
 
 
 class PlantBase(BaseModel):
-    scientific_name: str | None = Field(None, max_length=100)
+    scientific_name: str | None = Field(None, max_length=200)
     common_name: str | None = Field(None, max_length=100)
     description: str | None = Field(None, max_length=500)
     location: str | None = Field(None, max_length=100)
@@ -25,12 +25,20 @@ class PlantCreate(PlantBase):
     name: str = Field(..., min_length=1, max_length=100)
     
 
-class PlantUpdate(PlantBase):
+class PlantUpdate(BaseModel):
     name: str | None = Field(None, min_length=1, max_length=100)
-    health_status: HealthStatus | None = None  # type: ignore
-    sunlight_type: SunlightType | None = None  # type: ignore
-    is_public: bool | None = None    # type: ignore
-    is_favorite: bool | None = None  # type: ignore
+    scientific_name: str | None = Field(None, max_length=200)
+    common_name: str | None = Field(None, max_length=100)
+    description: str | None = None
+    location: str | None = Field(None, max_length=100)
+    pot_size: str | None = Field(None, max_length=50)
+    soil_type: str | None = Field(None, max_length=100)
+    acquired_date: datetime | None = None
+    health_status: HealthStatus | None = None
+    watering_frequency: str | None = Field(None, max_length=100)
+    sunlight_type: SunlightType | None = None
+    is_public: bool | None = None
+    is_favorite: bool | None = None
 
 
 class PlantResponse(BaseModel):
@@ -56,3 +64,12 @@ class PlantResponse(BaseModel):
     model_config = ConfigDict(
         from_attributes=True
     )
+
+
+class PlantFilterParams(BaseModel):
+    q: str | None = None
+    health: HealthStatus | None = None
+    sunlight: SunlightType | None = None
+    is_public: bool | None = None
+    public_only: bool | None = None
+    favorites_only: bool | None = None
