@@ -3,7 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, status
 
 from src.api.deps.auth import CurrentUserDep
-from src.api.deps.domain.plant import PlantServiceDep
+from src.api.deps.domain.plant import PlantServiceDep, PlantFiltersDep
 from src.models.plant import Plant
 from src.schemas.plant import PlantCreate, PlantResponse, PlantUpdate
 
@@ -13,7 +13,8 @@ router = APIRouter(prefix='/plants', tags=['Plants'])
 @router.get('/', response_model=list[PlantResponse])
 async def get_plants(
     service: PlantServiceDep,
-    current_user: CurrentUserDep
+    current_user: CurrentUserDep,
+    filters: PlantFiltersDep
 ) -> list[Plant]:
     return await service.get_all(current_user)
 
