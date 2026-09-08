@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     MAIL_SSL_TLS: bool = False
     USE_CREDENTIALS: bool = True
 
+    PAGINATION_LIMIT: int = 20
+
     model_config = SettingsConfigDict(
         env_file='.env',
         case_sensitive=True,
