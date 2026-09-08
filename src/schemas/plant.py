@@ -1,9 +1,10 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
+from sqlalchemy import column
 
-from src.models.plant import HealthStatus, SunlightType
+from src.models.plant import HealthStatus, SunlightType, Plant
 
 
 class PlantBase(BaseModel):
@@ -64,6 +65,12 @@ class PlantResponse(BaseModel):
     model_config = ConfigDict(
         from_attributes=True
     )
+
+    @classmethod
+    def from_row(cls, item: Plant) -> PlantResponse:
+        return cls(
+            **{c.name: getattr(item, c.name) for c in item.__table__.columns}
+        )
 
 
 class PlantFilterParams(BaseModel):
