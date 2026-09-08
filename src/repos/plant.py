@@ -1,8 +1,8 @@
 from uuid import UUID
 
-from sqlalchemy import select, or_, func
+from sqlalchemy import func, or_, select
 
-from src.models.plant import Plant, HealthStatus, SunlightType
+from src.models.plant import HealthStatus, Plant, SunlightType
 from src.repos.base import BaseRepository
 
 
@@ -20,10 +20,6 @@ class PlantRepository(BaseRepository[Plant]):
         public_only: bool = False,
         favorites_only: bool = False
     ) -> tuple[list[Plant], int]:
-
-        print(f'\n\n>>>>>>>>> public_only={public_only}\n\n')
-        print(f'\n\n>>>>>>>>> favorites_only={favorites_only}\n\n')
-
         stmt = select(Plant).where(Plant.owner_id == user_id)
 
         if q:

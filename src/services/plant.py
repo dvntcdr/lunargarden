@@ -4,7 +4,8 @@ from src.core.exceptions import ForbiddenException, NotFoundException
 from src.models.plant import Plant
 from src.models.user import User
 from src.repos.plant import PlantRepository
-from src.schemas.plant import PlantCreate, PlantUpdate, PlantFilterParams
+from src.schemas.pagination import PagedResponse, PaginationParams
+from src.schemas.plant import PlantCreate, PlantFilterParams, PlantResponse, PlantUpdate
 
 
 class PlantService:
@@ -12,10 +13,18 @@ class PlantService:
     def __init__(self, plant_repo: PlantRepository) -> None:
         self.plant_repo = plant_repo
     
-    async def get_all(self, user: User, filters: PlantFilterParams) -> list[Plant]:
-        return (
-            await self.plant_repo.get_all_by_owner(user.id, **filters.model_dump())
-        )[0]  # TODO: return [items, total]
+    async def get_all(
+        self,
+        user: User,
+        filters: PlantFilterParams,
+        pg_params: PaginationParams
+    ) -> PagedResponse[PlantResponse]:
+        rows, total = await self.plant_repo.get_all_by_owner(
+            user.id, **filters.model_dump(), limit=pg_params.limit, offset=pg_params.offset
+        )
+        items = [PlantResponse.from_row(item) for item in rows]
+        return PagedResponse.create(items, total, pg_params)
+        
     
     async def get_by_id(self, plant_id: UUID, user: User) -> Plant:
         return await self._get_plant_for_user(plant_id, user.id)

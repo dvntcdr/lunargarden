@@ -3,20 +3,23 @@ from uuid import UUID
 from fastapi import APIRouter, status
 
 from src.api.deps.auth import CurrentUserDep
-from src.api.deps.domain.plant import PlantServiceDep, PlantFiltersDep
+from src.api.deps.domain.plant import PlantFiltersDep, PlantServiceDep
+from src.api.deps.pagination import PaginationParamsDep
 from src.models.plant import Plant
+from src.schemas.pagination import PagedResponse
 from src.schemas.plant import PlantCreate, PlantResponse, PlantUpdate
 
 router = APIRouter(prefix='/plants', tags=['Plants'])
 
 
-@router.get('/', response_model=list[PlantResponse])
+@router.get('/', response_model=PagedResponse[PlantResponse])
 async def get_plants(
     service: PlantServiceDep,
     current_user: CurrentUserDep,
+    pg_params: PaginationParamsDep,
     filters: PlantFiltersDep
-) -> list[Plant]:  # TODO: return [items, total]
-    return await service.get_all(current_user, filters)
+) -> PagedResponse[PlantResponse]:
+    return await service.get_all(current_user, filters, pg_params)
 
 
 @router.get('/{plant_id}', response_model=PlantResponse)
