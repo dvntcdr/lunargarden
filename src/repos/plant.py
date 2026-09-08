@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from sqlalchemy import select, or_
+from sqlalchemy import select, or_, func
 
 from src.models.plant import Plant, HealthStatus, SunlightType
 from src.repos.base import BaseRepository
@@ -9,11 +9,55 @@ from src.repos.base import BaseRepository
 class PlantRepository(BaseRepository[Plant]):
     model = Plant
 
-    async def get_all_by_owner(self, user_id: UUID) -> list[Plant]:
-        plants = await self.session.scalars(
-            select(Plant).where(Plant.owner_id == user_id)
+    async def get_all_by_owner(
+        self,
+        user_id: UUID,
+        limit: int = 20,
+        offset: int = 0,
+        q: str | None = None,
+        health: HealthStatus | None = None,
+        sunlight: SunlightType | None = None,
+        public_only: bool = False,
+        favorites_only: bool = False
+    ) -> tuple[list[Plant], int]:
+
+        print(f'\n\n>>>>>>>>> public_only={public_only}\n\n')
+        print(f'\n\n>>>>>>>>> favorites_only={favorites_only}\n\n')
+
+        stmt = select(Plant).where(Plant.owner_id == user_id)
+
+        if q:
+            stmt = stmt.where(
+                or_(
+                    Plant.name.icontains(q),
+                    Plant.scientific_name.icontains(q),
+                    Plant.common_name.icontains(q),
+                )
+            )
+        
+        if health:
+            stmt = stmt.where(Plant.health_status == health)
+        
+        if sunlight:
+            stmt = stmt.where(Plant.sunlight_type == sunlight)
+        
+        if public_only:
+            stmt = stmt.where(Plant.is_public.is_(True))
+        
+        if favorites_only:
+            stmt = stmt.where(Plant.is_favorite.is_(True))
+
+        items = await self.session.scalars(
+            stmt.order_by(Plant.created_at.desc())
+            .limit(limit)
+            .offset(offset)
         )
-        return list(plants)
+
+        total = await self.session.scalar(
+            select(func.count()).select_from(stmt.subquery())
+        ) or 0
+
+        return list(items), total
     
     async def get_all_by_owner_public(self, user_id: UUID) -> list[Plant]:
         plants = await self.session.scalars(

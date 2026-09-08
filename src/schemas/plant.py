@@ -70,6 +70,5 @@ class PlantFilterParams(BaseModel):
     q: str | None = None
     health: HealthStatus | None = None
     sunlight: SunlightType | None = None
-    is_public: bool | None = None
-    public_only: bool | None = None
-    favorites_only: bool | None = None
+    public_only: bool = False
+    favorites_only: bool = False

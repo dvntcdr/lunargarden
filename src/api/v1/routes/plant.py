@@ -15,8 +15,8 @@ async def get_plants(
     service: PlantServiceDep,
     current_user: CurrentUserDep,
     filters: PlantFiltersDep
-) -> list[Plant]:
-    return await service.get_all(current_user)
+) -> list[Plant]:  # TODO: return [items, total]
+    return await service.get_all(current_user, filters)
 
 
 @router.get('/{plant_id}', response_model=PlantResponse)

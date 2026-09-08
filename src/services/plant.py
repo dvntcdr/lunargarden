@@ -4,7 +4,7 @@ from src.core.exceptions import ForbiddenException, NotFoundException
 from src.models.plant import Plant
 from src.models.user import User
 from src.repos.plant import PlantRepository
-from src.schemas.plant import PlantCreate, PlantUpdate
+from src.schemas.plant import PlantCreate, PlantUpdate, PlantFilterParams
 
 
 class PlantService:
@@ -12,8 +12,10 @@ class PlantService:
     def __init__(self, plant_repo: PlantRepository) -> None:
         self.plant_repo = plant_repo
     
-    async def get_all(self, user: User) -> list[Plant]:
-        return await self.plant_repo.get_all_by_owner(user.id)
+    async def get_all(self, user: User, filters: PlantFilterParams) -> list[Plant]:
+        return (
+            await self.plant_repo.get_all_by_owner(user.id, **filters.model_dump())
+        )[0]  # TODO: return [items, total]
     
     async def get_by_id(self, plant_id: UUID, user: User) -> Plant:
         return await self._get_plant_for_user(plant_id, user.id)
