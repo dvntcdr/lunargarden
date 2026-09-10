@@ -3,6 +3,7 @@ from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 
 from src import models  # noqa
+from src.api.health import router as health_router
 from src.api.v1.router import v1_router
 from src.core.config import settings
 from src.core.exceptions import AppException
@@ -10,6 +11,7 @@ from src.core.exceptions import AppException
 app = FastAPI(**settings.fastapi_kwargs)
 
 app.include_router(v1_router)
+app.include_router(health_router)
 
 
 @app.exception_handler(AppException)
@@ -30,17 +32,5 @@ async def root() -> JSONResponse:
             'docs': [
                 settings.DOCS_URL, settings.REDOC_URL
             ],
-        }
-    )
-
-
-@app.get('/health', tags=['System'])
-async def healthcheck() -> JSONResponse:
-    return JSONResponse(
-        status_code=status.HTTP_200_OK,
-        content={
-            'status': 'ok',
-            'version': settings.VERSION,
-            'app': settings.APP_NAME,
         }
     )
