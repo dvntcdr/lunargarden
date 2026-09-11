@@ -31,7 +31,7 @@ async def get_plant(
     return await service.get_by_id(plant_id, current_user)
 
 
-@router.post('/', response_model=PlantResponse)
+@router.post('/', response_model=PlantResponse, status_code=status.HTTP_201_CREATED)
 async def create_plant(
     service: PlantServiceDep,
     data: PlantCreate,
